@@ -1,0 +1,15 @@
+# Quantumult X 去开屏广告规则
+# 根据 2026-10-15 抓包编写 | 目标 App：POST /App/Ad/splashInfo 等广告接口
+# API 域名会轮换，规则用 [^/]+ 匹配任意域名；接口返回 data 为加密内容，故用 reject 直接掐掉请求
+
+[rewrite_local]
+# 开屏广告（核心）
+^https?://[^/]+/App/Ad/splashInfo url reject
+# 同系列广告接口：活动弹窗 / 短剧广告 / 广告配置
+^https?://[^/]+/App/Ad/activityInfo url reject
+^https?://[^/]+/App/Ad/skitAdInfo url reject
+^https?://[^/]+/App/ad/config url reject
+
+[mitm]
+# 当前 API 域名（2026-10-15 抓包时）；域名轮换后需在此追加新域名
+hostname = %APPEND% sdapi.u4gdp3.com
