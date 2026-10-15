@@ -1,7 +1,9 @@
 # Quantumult X 去开屏广告规则
 # 根据 2026-10-15 抓包编写 | 目标 App：POST /App/Ad/splashInfo 等广告接口
 # API 域名会轮换，规则用 [^/]+ 匹配任意域名；接口返回 data 为加密内容，故用 reject 直接掐掉请求
-# 2026-10-15 12:05 更新：API 域名已轮换为 api.sef5w7.com；新增 noticeInfo / vajraInfo / homeFloatAd 三个广告位
+# 2026-10-15 12:05 更新：新增 noticeInfo / vajraInfo / homeFloatAd 三个广告位
+# 2026-10-15 12:40 更新（根因修复）：该 App 内置 22 个随机 API 域名池，每次冷启动轮换选用；
+#   重写规则匹配 URL 路径必须先 MITM 解开 HTTPS，所以把 22 个域名全部加入 MITM 列表，一劳永逸
 
 [rewrite_local]
 # 开屏广告（核心）
@@ -16,6 +18,7 @@
 ^https?://[^/]+/App/IndexList/homeFloatAd url reject
 
 [mitm]
-# API 域名会轮换；轮换后需在此追加新域名，否则 HTTPS 解不开、路径规则失效
-# 2026-10-15 已知：sdapi.u4gdp3.com、api.sef5w7.com
-hostname = %APPEND% sdapi.u4gdp3.com, api.sef5w7.com
+# App 的完整 API 域名池（2026-10-15 两次抓包确认共 22 个，池子稳定、每次启动轮换选用）
+# 注意：MITM 按域名精确匹配，漏一个都可能让那次启动的广告漏网
+# 若日后抓包发现新域名，追加到此列表即可
+hostname = %APPEND% api.46d5umpk.com, api.5h5hbfhh.com, api.7gmsut2m.com, api.bmjb2mk7.com, api.cjxxpgkq.com, api.gq89em.com, api.moe3dze.com, api.mxtxqe.com, api.qchyzkww.com, api.rqqakqyn.com, api.sef5w7.com, api.tezpgdzn.com, api.tkfupxqu.com, api.tnw4m9b.com, api.wtwvm3.com, sdapi.4zu76s.com, sdapi.6ne6zmh.com, sdapi.g4k74qn.com, sdapi.re3k7n.com, sdapi.tymnpk4.com, sdapi.u4gdp3.com, sdapi.use3p2m.com
